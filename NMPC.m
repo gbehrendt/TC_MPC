@@ -318,13 +318,13 @@ avg_MPC_time = mean(times);
 total_MPC_time = sum(times);
 
 tspan = T*[0:iter];
-tspan1 = 0:2*iter*T-1;
+tspan1 = 0:iter*T-1;
 uPlot = [];
 
 for i = 1:numControls
     row=[];
     for j = 1:iter
-        row = [row u_cl(j,i)*ones(1,2*T)];
+        row = [row u_cl(j,i)*ones(1,T)];
     end
     uPlot = [uPlot; row];
 end
@@ -345,7 +345,7 @@ title('Deputy Thrust Inputs, $u^{\mathcal{D}}_d$','Interpreter','latex','FontSiz
 xlabel('Time ($s$)','Interpreter','latex','FontSize',12)
 ylabel('Thrust ($N$)','Interpreter','latex','FontSize',12)
 xlim([0 iter*T])
-ylim([-0.5e-2 0.5e-2])
+%ylim([-0.5e-2 0.5e-2])
 legend('$u^{\mathcal{D}}_{d,x}$','$u^{\mathcal{D}}_{d,y}$','$u^{\mathcal{D}}_{d,z}$','Interpreter','latex','Location','southeast','FontSize',9)
 grid on;
 
@@ -355,7 +355,7 @@ title('Deputy Torque Inputs, $\tau^{\mathcal{D}}$','Interpreter','latex','FontSi
 xlabel('Time ($s$)','Interpreter','latex','FontSize',12)
 ylabel('Angular Acceleration ($rad/s^2$)','Interpreter','latex','FontSize',12)
 xlim([0 iter*T])
-ylim([-0.5e-3 0.5e-3])
+%ylim([-0.5e-3 0.5e-3])
 legend('$\tau^{\mathcal{D}}_x$', '$\tau^{\mathcal{D}}_y$','$\tau^{\mathcal{D}}_z$','Interpreter','latex','Location','southeast','FontSize',9)
 grid on;
 
@@ -455,7 +455,7 @@ xlabel('Time ($s$)','Interpreter','latex','FontSize',15)
 ylabel('$\Vert x(k) - x_d \Vert_2$','Interpreter','latex','FontSize',15)
 grid on;
 
-%%
+%% THIS IS FOR SAVING MY DATA
 % addpath('/home/corelab/Documents/Gabe/CCC_IFAC_unperturb_data/');
 % addpath('/home/corelab/Documents/Gabe/CCC_IFAC_unperturb_plots/');
 % saveDir = "/home/corelab/Documents/Gabe/CCC_IFAC_unperturb_data/";
@@ -475,7 +475,7 @@ grid on;
 %%
 
 
-
+%% THIS FUNCTION SHIFTS THE PROBLEM TO THE NEXT TIME STEP
 function [t0, x0, u0] = shift(T, t0, x0, u, f)
     st = x0;
     con = u(1,:)';
@@ -498,6 +498,7 @@ function R = q2R(q)
     R = eye(3) + 2*skew(q(2:4))* skew(q(2:4)) + 2*q(1)*skew(q(2:4));
 end
 
+%% THIS FUNCTION WAS FOR PREVIOUS DEBUGGING AND HAS NO USE NOW
 function [dw1,dw2] = check(W,dw,tau,J)
     K = inv(J);
     J1 = J(1,1); J2 = J(2,2); J3 = J(3,3);
@@ -513,6 +514,7 @@ function [dw1,dw2] = check(W,dw,tau,J)
 
 end
 
+%% THIS FUNCTION TURNS A QUATERNION INTO A ROTATION MATRIX
 function R2 = q2R2(q)
     s = q(1);
     v1 = q(2); 
