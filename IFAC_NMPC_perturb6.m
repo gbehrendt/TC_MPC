@@ -303,13 +303,13 @@ total_MPC_time = sum(times);
 
 %%
 tspan = T*[0:iter];
-tspan1 = 0:2*iter*T-1;
+tspan1 = 0:iter*T-1;
 uPlot = [];
 
 for i = 1:numControls
     row=[];
     for j = 1:iter
-        row = [row u_cl(j,i)*ones(1,2*T)];
+        row = [row u_cl(j,i)*ones(1,T)];
     end
     uPlot = [uPlot; row];
 end
@@ -452,18 +452,18 @@ xlabel('Time ($s$)','Interpreter','latex','FontSize',15)
 ylabel('$\Vert x(k) - x_d \Vert_2$','Interpreter','latex','FontSize',15)
 grid on;
 
-%%
-addpath('/home/corelab/Documents/Gabe/CCC_IFAC_perturb_data/');
-addpath('/home/corelab/Documents/Gabe/CCC_IFAC_perturb_plots/');
-saveDir = "/home/corelab/Documents/Gabe/CCC_IFAC_perturb_data/";
-figPath = "/home/corelab/Documents/Gabe/CCC_IFAC_perturb_plots/max"+string(opts.ipopt.max_iter)+"/";
-filename = saveDir + "IFACperturbmaxIter"+string(opts.ipopt.max_iter)+".mat";
+%% THIS IS FOR SVING THE DATA
+% addpath('/home/corelab/Documents/Gabe/CCC_IFAC_perturb_data/');
+% addpath('/home/corelab/Documents/Gabe/CCC_IFAC_perturb_plots/');
+% saveDir = "/home/corelab/Documents/Gabe/CCC_IFAC_perturb_data/";
+% figPath = "/home/corelab/Documents/Gabe/CCC_IFAC_perturb_plots/max"+string(opts.ipopt.max_iter)+"/";
+% filename = saveDir + "IFACperturbmaxIter"+string(opts.ipopt.max_iter)+".mat";
 %save(filename);
 
-figName = ["inputs"; "position"; "velocity"; "quaternion"; "angular_vel"; "cost"; "error"];
-for ii = 1:7
+% figName = ["inputs"; "position"; "velocity"; "quaternion"; "angular_vel"; "cost"; "error"];
+% for ii = 1:7
     %saveas(figure(ii), fullfile(figPath,(figName(ii) + '.png')));
-end
+% end
 
 iter
 sprintf('%.12f',sum(times))
@@ -480,6 +480,8 @@ function [t0, x0, u0] = shift(T, t0, x0, u, f)
     k2 = f(st + T/2*k1, con);
     k3 = f(st + T/2*k2, con);
     k4 = f(st + T*k3, con);
+    
+    % THIS IS WHERE I ADD PERTURBATIONS
     perturbPos = randn(3,1)/(1e3);
     perturbVel = randn(3,1)/(1e6);
     perturbQ = randn(4,1)/(1e8);
